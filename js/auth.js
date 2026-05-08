@@ -88,7 +88,6 @@ window.executeLogin = async () => {
       btnSubmit.disabled = false;
     }
   };
-};
 
 // Proteção de Rotas (Aplicado no index.html)
 function checkAuth() {
