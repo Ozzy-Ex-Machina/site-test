@@ -21,6 +21,14 @@ try {
 
 const loginForm = document.getElementById('loginForm');
 const btnSubmit = document.getElementById('btnSubmit');
+
+// Feedback visual garantido no carregamento
+window.addEventListener('load', () => {
+  if(typeof window.supabase === 'undefined') {
+    alert('Erro: O sistema Supabase não foi carregado. Verifique sua conexão ou bloqueador de anúncios.');
+  }
+});
+
 if (loginForm) {
   loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -29,49 +37,55 @@ if (loginForm) {
     const errorMsg = document.getElementById('errorMsg');
 
     if (!email || !password) {
+      errorMsg.style.color = '#e74c3c';
       errorMsg.textContent = 'Preencha o e-mail e a senha.';
       errorMsg.style.display = 'block';
       return;
     }
 
-    btnSubmit.textContent = 'Autenticando...';
+    btnSubmit.textContent = 'Aguarde...';
     btnSubmit.disabled = true;
-    errorMsg.style.display = 'none';
+    errorMsg.style.display = 'block';
+    errorMsg.style.color = '#f1c40f'; // amarelo
+    errorMsg.textContent = 'Conectando ao banco de dados...';
 
     try {
       if (isSimulated) {
-        // Modo de Simulação (Enquanto não configuram o Supabase)
+        errorMsg.textContent = 'Modo simulado ativo...';
         setTimeout(() => {
           if (email === 'admin@pcbram.org' && password === 'admin123') {
+            errorMsg.style.color = '#2ecc71';
+            errorMsg.textContent = 'Login aprovado! Redirecionando...';
             sessionStorage.setItem('isLoggedIn', 'true');
             window.location.href = 'index.html';
           } else {
-            errorMsg.textContent = 'Modo Simulado: Use admin@pcbram.org e admin123';
-            errorMsg.style.display = 'block';
+            errorMsg.style.color = '#e74c3c';
+            errorMsg.textContent = 'Modo Simulado: Senha incorreta.';
             btnSubmit.textContent = 'Autenticar Sistema';
             btnSubmit.disabled = false;
           }
         }, 1000);
       } else {
-        // Modo Produção Real com Supabase
+        errorMsg.textContent = 'Verificando suas credenciais...';
         const { data, error } = await supabase.auth.signInWithPassword({
           email: email,
           password: password,
         });
 
         if (error) {
-          errorMsg.textContent = "Erro: " + error.message;
-          errorMsg.style.display = 'block';
+          errorMsg.style.color = '#e74c3c';
+          errorMsg.textContent = "Acesso negado: " + error.message;
           btnSubmit.textContent = 'Autenticar Sistema';
           btnSubmit.disabled = false;
         } else {
-          // Login bem sucedido
+          errorMsg.style.color = '#2ecc71';
+          errorMsg.textContent = 'Login aprovado! Redirecionando...';
           window.location.href = 'index.html';
         }
       }
     } catch (err) {
-      errorMsg.textContent = "Erro grave no navegador: " + err.message;
-      errorMsg.style.display = 'block';
+      errorMsg.style.color = '#e74c3c';
+      errorMsg.textContent = "Erro interno: " + err.message;
       btnSubmit.textContent = 'Autenticar Sistema';
       btnSubmit.disabled = false;
     }
