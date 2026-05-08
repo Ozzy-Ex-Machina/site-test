@@ -19,9 +19,10 @@ try {
   isSimulated = true;
 }
 
+const loginForm = document.getElementById('loginForm');
 const btnSubmit = document.getElementById('btnSubmit');
-if (btnSubmit) {
-  btnSubmit.addEventListener('click', async (e) => {
+if (loginForm) {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
