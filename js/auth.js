@@ -29,9 +29,8 @@ window.addEventListener('load', () => {
   }
 });
 
-if (loginForm) {
-  loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+if (btnSubmit) {
+  const executeLogin = async () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('errorMsg');
@@ -89,6 +88,15 @@ if (loginForm) {
       btnSubmit.textContent = 'Autenticar Sistema';
       btnSubmit.disabled = false;
     }
+  };
+
+  btnSubmit.addEventListener('click', executeLogin);
+
+  // Permite logar apertando Enter em qualquer input
+  document.querySelectorAll('#loginForm input').forEach(input => {
+    input.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') executeLogin();
+    });
   });
 }
 

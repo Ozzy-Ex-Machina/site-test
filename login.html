@@ -27,7 +27,7 @@
   <h1>Acesso Administrativo</h1>
   <p>Comitê Regional do AM - Sistema de Gestão</p>
   
-  <form id="loginForm" onsubmit="return false;">
+  <div id="loginForm">
     <div class="form-group">
       <label style="color:#ccc; font-size:10px; margin-bottom:5px; display:block;">E-mail Corporativo</label>
       <input type="email" id="email" class="form-control" placeholder="Seu e-mail cadastrado no Supabase" required>
@@ -39,9 +39,9 @@
         <span id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer; color: #888; font-size: 14px;">👁️</span>
       </div>
     </div>
-    <button type="submit" class="btn-login" id="btnSubmit">Autenticar Sistema</button>
+    <button type="button" class="btn-login" id="btnSubmit">Autenticar Sistema</button>
     <div class="error-msg" id="errorMsg">Credenciais inválidas.</div>
-  </form>
+  </div>
 </div>
 
 <script>
