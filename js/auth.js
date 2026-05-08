@@ -9,9 +9,14 @@ let supabase = null;
 let isSimulated = true; // Por padrão, inicia em modo simulado para não quebrar o site
 
 // Tenta inicializar o Supabase se a chave foi trocada
-if (SUPABASE_URL !== 'SUA_SUPABASE_URL_AQUI' && typeof window.supabase !== 'undefined') {
-  supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  isSimulated = false;
+try {
+  if (SUPABASE_URL !== 'SUA_SUPABASE_URL_AQUI' && typeof window.supabase !== 'undefined') {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    isSimulated = false;
+  }
+} catch(err) {
+  console.error("Supabase Init Error:", err);
+  isSimulated = true;
 }
 
 const btnSubmit = document.getElementById('btnSubmit');
@@ -78,14 +83,20 @@ function checkAuth() {
     if (!sessionStorage.getItem('isLoggedIn')) {
       window.location.replace('login.html');
     } else {
-      document.body.style.display = 'block';
+      const overlay = document.getElementById('security-overlay');
+      if (overlay) overlay.style.display = 'none';
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) mainContent.style.display = 'block';
     }
   } else {
     supabase.auth.getSession().then(({ data: { session }, error }) => {
       if (error || !session) {
         window.location.replace('login.html');
       } else {
-        document.body.style.display = 'block';
+        const overlay = document.getElementById('security-overlay');
+        if (overlay) overlay.style.display = 'none';
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) mainContent.style.display = 'block';
       }
     }).catch((err) => {
       window.location.replace('login.html');

@@ -7,37 +7,46 @@
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body style="display: none;">
+<body>
 
-<div class="header">
-  <div class="star">★</div>
-  <div class="header-text">
-    <h1>Partido Comunista Brasileiro Revolucionário</h1>
-    <h2>⚙ Comitê Regional do Amazonas — Sistema de Gestão</h2>
-    <p>Painel de Controle Central · Atualizado em: <span id="header-date">Maio / 2026</span></p>
+<!-- OVERLAY DE SEGURANÇA -->
+<div id="security-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; display: flex; align-items: center; justify-content: center; color: #fff; font-family: Arial, sans-serif; flex-direction: column;">
+  <div style="font-size: 24px; margin-bottom: 10px;">Autenticando...</div>
+  <div id="security-log" style="font-size: 12px; color: #aaa;">Iniciando verificação</div>
+</div>
+
+<!-- CONTEÚDO PRINCIPAL (escondido por padrão via JS) -->
+<div id="main-content" style="display: none;">
+  <div class="header">
+    <div class="star">★</div>
+    <div class="header-text">
+      <h1>Partido Comunista Brasileiro Revolucionário</h1>
+      <h2>⚙ Comitê Regional do Amazonas — Sistema de Gestão</h2>
+      <p>Painel de Controle Central · Atualizado em: <span id="header-date">Maio / 2026</span></p>
+    </div>
   </div>
-</div>
 
-<div class="nav" id="main-nav">
-  <div class="nav-item active" data-route="inicio">🏠 Início</div>
-  <div class="nav-item" data-route="filiados">👥 Filiados</div>
-  <div class="nav-item" data-route="nucleos">🏘 Núcleos/Células</div>
-  <div class="nav-item" data-route="financas">💰 Finanças</div>
-  <div class="nav-item" data-route="atividades">📅 Atividades</div>
-  <div class="nav-item" data-route="comunicacao">📣 Comunicação</div>
-  <div class="nav-item" data-route="formacao">📚 Formação Política</div>
-  <div class="nav-item" data-route="perfis">🪪 Perfis Militantes</div>
-  <div class="nav-item" data-route="relatorios">📊 Relatórios</div>
-</div>
+  <div class="nav" id="main-nav">
+    <div class="nav-item active" data-route="inicio">🏠 Início</div>
+    <div class="nav-item" data-route="filiados">👥 Filiados</div>
+    <div class="nav-item" data-route="nucleos">🏘 Núcleos/Células</div>
+    <div class="nav-item" data-route="financas">💰 Finanças</div>
+    <div class="nav-item" data-route="atividades">📅 Atividades</div>
+    <div class="nav-item" data-route="comunicacao">📣 Comunicação</div>
+    <div class="nav-item" data-route="formacao">📚 Formação Política</div>
+    <div class="nav-item" data-route="perfis">🪪 Perfis Militantes</div>
+    <div class="nav-item" data-route="relatorios">📊 Relatórios</div>
+  </div>
 
-<div class="content" id="app-view">
-  <!-- Views injetadas aqui -->
-</div>
+  <div class="content" id="app-view">
+    <!-- Views injetadas aqui -->
+  </div>
 
-<div class="footer">
-  <span>⚙ PCBR – Comitê Regional do Amazonas · Sistema de Gestão v1.0</span>
-  <span>Este documento é de uso interno e confidencial</span>
-  <span id="footer-date">Gerado em: 08/05/2026</span>
+  <div class="footer">
+    <span>⚙ PCBR – Comitê Regional do Amazonas · Sistema de Gestão v1.0</span>
+    <span>Este documento é de uso interno e confidencial</span>
+    <span id="footer-date">Gerado em: 08/05/2026</span>
+  </div>
 </div>
 
 <!-- Modal Container -->
@@ -50,11 +59,29 @@
 <!-- Scripts -->
 <script src="js/auth.js"></script>
 <script>
-  // Verifica se o usuário está logado antes de carregar o app
-  if(typeof checkAuth === 'function') {
-    checkAuth();
-    setupLogout();
+  function logSecurity(msg) {
+    const el = document.getElementById('security-log');
+    if (el) el.textContent = msg;
   }
+
+  logSecurity("Carregando scripts...");
+
+  // Força o carregamento do checkAuth
+  window.addEventListener('load', function() {
+    logSecurity("Verificando credenciais...");
+    if(typeof checkAuth === 'function') {
+      try {
+        checkAuth();
+        setupLogout();
+      } catch (err) {
+        logSecurity("Erro fatal: " + err.message);
+        setTimeout(() => window.location.replace('login.html'), 3000);
+      }
+    } else {
+      logSecurity("Erro de sistema: Autenticador não encontrado.");
+      setTimeout(() => window.location.replace('login.html'), 3000);
+    }
+  });
 </script>
 <script src="js/data.js"></script>
 <script src="js/components.js"></script>
