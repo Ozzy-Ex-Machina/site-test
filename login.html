@@ -39,7 +39,7 @@
         <span id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer; color: #888; font-size: 14px;">👁️</span>
       </div>
     </div>
-    <button type="button" class="btn-login" id="btnSubmit">Autenticar Sistema</button>
+    <button type="button" class="btn-login" id="btnSubmit" onclick="window.executeLogin()">Autenticar Sistema</button>
     <div class="error-msg" id="errorMsg">Credenciais inválidas.</div>
   </div>
 </div>
@@ -52,6 +52,15 @@
     const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
     password.setAttribute('type', type);
     this.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+
+  // Permite logar com Enter
+  document.querySelectorAll('#loginForm input').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        if (typeof window.executeLogin === 'function') window.executeLogin();
+      }
+    });
   });
 </script>
 <script src="js/auth.js?v=2"></script>

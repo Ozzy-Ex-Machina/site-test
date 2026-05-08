@@ -19,8 +19,7 @@ try {
   isSimulated = true;
 }
 
-const loginForm = document.getElementById('loginForm');
-const btnSubmit = document.getElementById('btnSubmit');
+// Variáveis DOM (removidas para evitar conflito com variáveis globais do navegador)
 
 // Feedback visual garantido no carregamento
 window.addEventListener('load', () => {
@@ -29,9 +28,9 @@ window.addEventListener('load', () => {
   }
 });
 
-if (btnSubmit) {
-  const executeLogin = async () => {
-    const email = document.getElementById('email').value;
+window.executeLogin = async () => {
+  const btnSubmit = document.getElementById('btnSubmit');
+  const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('errorMsg');
 
@@ -89,16 +88,7 @@ if (btnSubmit) {
       btnSubmit.disabled = false;
     }
   };
-
-  btnSubmit.addEventListener('click', executeLogin);
-
-  // Permite logar apertando Enter em qualquer input
-  document.querySelectorAll('#loginForm input').forEach(input => {
-    input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') executeLogin();
-    });
-  });
-}
+};
 
 // Proteção de Rotas (Aplicado no index.html)
 function checkAuth() {
