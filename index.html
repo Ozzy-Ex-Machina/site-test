@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Sistema de Gestão - PCBR Amazonas</title>
+<link rel="stylesheet" href="css/styles.css">
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="display: none;">
+
+<div class="header">
+  <div class="star">★</div>
+  <div class="header-text">
+    <h1>Partido Comunista Brasileiro Revolucionário</h1>
+    <h2>⚙ Comitê Regional do Amazonas — Sistema de Gestão</h2>
+    <p>Painel de Controle Central · Atualizado em: <span id="header-date">Maio / 2026</span></p>
+  </div>
+</div>
+
+<div class="nav" id="main-nav">
+  <div class="nav-item active" data-route="inicio">🏠 Início</div>
+  <div class="nav-item" data-route="filiados">👥 Filiados</div>
+  <div class="nav-item" data-route="nucleos">🏘 Núcleos/Células</div>
+  <div class="nav-item" data-route="financas">💰 Finanças</div>
+  <div class="nav-item" data-route="atividades">📅 Atividades</div>
+  <div class="nav-item" data-route="comunicacao">📣 Comunicação</div>
+  <div class="nav-item" data-route="formacao">📚 Formação Política</div>
+  <div class="nav-item" data-route="perfis">🪪 Perfis Militantes</div>
+  <div class="nav-item" data-route="relatorios">📊 Relatórios</div>
+</div>
+
+<div class="content" id="app-view">
+  <!-- Views injetadas aqui -->
+</div>
+
+<div class="footer">
+  <span>⚙ PCBR – Comitê Regional do Amazonas · Sistema de Gestão v1.0</span>
+  <span>Este documento é de uso interno e confidencial</span>
+  <span id="footer-date">Gerado em: 08/05/2026</span>
+</div>
+
+<!-- Modal Container -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal" id="modal-content">
+    <!-- Conteúdo do modal injetado aqui -->
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/auth.js"></script>
+<script>
+  // Verifica se o usuário está logado antes de carregar o app
+  if(typeof checkAuth === 'function') {
+    checkAuth();
+    setupLogout();
+  }
+</script>
+<script src="js/data.js"></script>
+<script src="js/components.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>

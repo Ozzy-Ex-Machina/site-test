@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Acesso Restrito - PCBR Amazonas</title>
+<link rel="stylesheet" href="css/styles.css">
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  body { display: flex; align-items: center; justify-content: center; height: 100vh; background: #111; }
+  .login-container { background: #222; border: 1px solid #c0392b; border-radius: 8px; width: 350px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center; }
+  .login-container .star { font-size: 48px; margin-bottom: 10px; }
+  .login-container h1 { font-size: 16px; color: #fff; margin-bottom: 5px; text-transform: uppercase; }
+  .login-container p { font-size: 11px; color: #aaa; margin-bottom: 24px; }
+  .form-group { text-align: left; margin-bottom: 15px; }
+  .form-control { width: 100%; padding: 10px; background: #1a1a1a; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 12px; }
+  .form-control:focus { outline: none; border-color: #c0392b; }
+  .btn-login { width: 100%; background: #c0392b; color: #fff; border: none; padding: 10px; border-radius: 4px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: background 0.3s; }
+  .btn-login:hover { background: #e74c3c; }
+  .error-msg { color: #e74c3c; font-size: 11px; margin-top: 10px; display: none; }
+</style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="star">★</div>
+  <h1>Acesso Administrativo</h1>
+  <p>Comitê Regional do AM - Sistema de Gestão</p>
+  
+  <form id="loginForm" onsubmit="return false;">
+    <div class="form-group">
+      <label style="color:#ccc; font-size:10px; margin-bottom:5px; display:block;">E-mail Corporativo</label>
+      <input type="email" id="email" class="form-control" placeholder="Seu e-mail cadastrado no Supabase" required>
+    </div>
+    <div class="form-group">
+      <label style="color:#ccc; font-size:10px; margin-bottom:5px; display:block;">Senha de Acesso</label>
+      <div style="position: relative;">
+        <input type="password" id="password" class="form-control" placeholder="••••••••" style="padding-right: 35px;" required>
+        <span id="togglePassword" style="position: absolute; right: 10px; top: 10px; cursor: pointer; color: #888; font-size: 14px;">👁️</span>
+      </div>
+    </div>
+    <button type="button" class="btn-login" id="btnSubmit">Autenticar Sistema</button>
+    <div class="error-msg" id="errorMsg">Credenciais inválidas.</div>
+  </form>
+</div>
+
+<script>
+  // Toggle Senha
+  const togglePassword = document.getElementById('togglePassword');
+  const password = document.getElementById('password');
+  togglePassword.addEventListener('click', function (e) {
+    const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+    password.setAttribute('type', type);
+    this.textContent = type === 'password' ? '👁️' : '🙈';
+  });
+</script>
+<script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; color: #f0f0f0; font-size: 13px; }
+  .header { background: linear-gradient(135deg, #c0392b 0%, #8b0000 60%, #2c2c2c 100%); padding: 18px 24px; display: flex; align-items: center; gap: 16px; border-bottom: 3px solid #e74c3c; }
+  .star { font-size: 36px; color: #f1c40f; text-shadow: 0 0 10px #f1c40f88; }
+  .header-text h1 { font-size: 17px; font-weight: 700; letter-spacing: 1px; color: #fff; text-transform: uppercase; }
+  .header-text h2 { font-size: 12px; color: #f1c40f; letter-spacing: 2px; margin-top: 2px; }
+  .header-text p { font-size: 10px; color: #ccc; margin-top: 2px; }
+  .nav { background: #2c0000; display: flex; gap: 2px; padding: 0 24px; border-bottom: 1px solid #5a0000; flex-wrap: wrap; }
+  .nav-item { padding: 8px 12px; font-size: 10px; cursor: pointer; color: #ccc; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
+  .nav-item:hover, .nav-item.active { color: #f1c40f; border-bottom-color: #f1c40f; background: #3a0000; }
+  .content { padding: 16px 20px; }
+  .date-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .date-bar span { font-size: 10px; color: #aaa; }
+  .date-bar .badge { background: #c0392b; color: #fff; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; }
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px; }
+  .kpi { background: #2a2a2a; border: 1px solid #3a3a3a; border-left: 3px solid #c0392b; border-radius: 6px; padding: 12px; }
+  .kpi.green { border-left-color: #27ae60; }
+  .kpi.yellow { border-left-color: #f1c40f; }
+  .kpi.blue { border-left-color: #2980b9; }
+  .kpi-label { font-size: 9px; color: #aaa; text-transform: uppercase; letter-spacing: .5px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #fff; margin: 4px 0; }
+  .kpi-sub { font-size: 9px; color: #888; }
+  .kpi-delta { font-size: 10px; font-weight: 600; }
+  .kpi-delta.up { color: #27ae60; }
+  .kpi-delta.down { color: #e74c3c; }
+  .section-title { font-size: 11px; font-weight: 700; color: #f1c40f; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; border-bottom: 1px solid #3a3a3a; padding-bottom: 4px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+  .panel { background: #222; border: 1px solid #333; border-radius: 6px; padding: 12px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+  .bar-label { font-size: 10px; color: #ccc; width: 110px; flex-shrink: 0; }
+  .bar-bg { flex: 1; background: #333; border-radius: 3px; height: 10px; }
+  .bar-fill { height: 10px; border-radius: 3px; background: #c0392b; }
+  .bar-fill.green { background: #27ae60; }
+  .bar-fill.yellow { background: #f1c40f; }
+  .bar-fill.blue { background: #2980b9; }
+  .bar-val { font-size: 10px; color: #aaa; width: 32px; text-align: right; }
+  .table { width: 100%; border-collapse: collapse; font-size: 10px; }
+  .table th { background: #3a0000; color: #f1c40f; padding: 5px 8px; text-align: left; font-weight: 600; letter-spacing: .3px; }
+  .table td { padding: 5px 8px; border-bottom: 1px solid #2a2a2a; color: #ddd; }
+  .table tr:hover td { background: #2a2a2a; }
+  .badge-status { display: inline-block; padding: 2px 7px; border-radius: 8px; font-size: 9px; font-weight: 600; }
+  .badge-status.ativo { background: #1a4a2a; color: #27ae60; }
+  .badge-status.alerta { background: #4a3a00; color: #f1c40f; }
+  .badge-status.inativo { background: #3a1a1a; color: #e74c3c; }
+  .mini-donut { display: flex; align-items: center; gap: 12px; }
+  .donut-svg { width: 80px; height: 80px; flex-shrink: 0; }
+  .donut-legend { font-size: 9px; }
+  .donut-legend div { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .agenda-item { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px solid #2a2a2a; }
+  .agenda-date { background: #c0392b; border-radius: 5px; padding: 4px 7px; text-align: center; min-width: 38px; flex-shrink: 0; }
+  .agenda-date .day { font-size: 14px; font-weight: 700; color: #fff; line-height: 1; }
+  .agenda-date .month { font-size: 8px; color: #ffaaaa; text-transform: uppercase; }
+  .agenda-info .title { font-size: 10px; font-weight: 600; color: #fff; }
+  .agenda-info .sub { font-size: 9px; color: #888; }
+  .finance-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid #2a2a2a; }
+  .finance-row .fl { font-size: 10px; color: #ccc; }
+  .finance-row .fv { font-size: 11px; font-weight: 600; }
+  .finance-row .fv.pos { color: #27ae60; }
+  .finance-row .fv.neg { color: #e74c3c; }
+  .progress-box { margin-bottom: 8px; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 9px; color: #aaa; margin-bottom: 3px; }
+  .progress-bg { background: #333; border-radius: 3px; height: 8px; }
+  .progress-fill { height: 8px; border-radius: 3px; }
+  .alert-box { background: #2a1a00; border: 1px solid #6a3a00; border-radius: 5px; padding: 8px 10px; margin-bottom: 6px; display: flex; gap: 8px; align-items: center; }
+  .alert-box .icon { font-size: 14px; }
+  .alert-box .msg { font-size: 10px; color: #f1c40f; }
+  .alert-box.red { background: #2a0000; border-color: #6a0000; }
+  .alert-box.red .msg { color: #e74c3c; }
+  .footer { background: #111; border-top: 1px solid #2a2a2a; padding: 8px 24px; display: flex; justify-content: space-between; font-size: 9px; color: #555; margin-top: 10px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="star">★</div>
+  <div class="header-text">
+    <h1>Partido Comunista Brasileiro Revolucionário</h1>
+    <h2>⚙ Comitê Regional do Amazonas — Sistema de Gestão</h2>
+    <p>Painel de Controle Central · Atualizado em: Maio / 2026</p>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="nav-item active">🏠 Início</div>
+  <div class="nav-item">👥 Filiados</div>
+  <div class="nav-item">🏘 Núcleos/Células</div>
+  <div class="nav-item">💰 Finanças</div>
+  <div class="nav-item">📅 Atividades</div>
+  <div class="nav-item">📣 Comunicação</div>
+  <div class="nav-item">📚 Formação Política</div>
+  <div class="nav-item">🪪 Perfis Militantes</div>
+  <div class="nav-item">📊 Relatórios</div>
+</div>
+
+<div class="content">
+  <div class="date-bar">
+    <span>🗓 Semana de referência: 05–09 Mai 2026 &nbsp;|&nbsp; Responsável: Secretaria Regional – AM</span>
+    <div class="badge">▲ SITUAÇÃO OPERACIONAL: NORMAL</div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <div class="kpi">
+      <div class="kpi-label">Filiados Ativos</div>
+      <div class="kpi-value">342</div>
+      <div class="kpi-delta up">▲ +18 este mês</div>
+      <div class="kpi-sub">62 municípios cobertos</div>
+    </div>
+    <div class="kpi green">
+      <div class="kpi-label">Células/Núcleos Ativos</div>
+      <div class="kpi-value">27</div>
+      <div class="kpi-delta up">▲ +3 novos núcleos</div>
+      <div class="kpi-sub">4 em implantação</div>
+    </div>
+    <div class="kpi yellow">
+      <div class="kpi-label">Arrecadação Mensal</div>
+      <div class="kpi-value">R$8.740</div>
+      <div class="kpi-delta up">▲ 91% da meta</div>
+      <div class="kpi-sub">Meta: R$ 9.600</div>
+    </div>
+    <div class="kpi blue">
+      <div class="kpi-label">Atividades no Mês</div>
+      <div class="kpi-value">14</div>
+      <div class="kpi-delta up">▲ 3 realizadas esta semana</div>
+      <div class="kpi-sub">5 agendadas</div>
+    </div>
+  </div>
+
+  <!-- Linha 2 -->
+  <div class="grid-2">
+    <!-- Núcleos por região -->
+    <div class="panel">
+      <div class="section-title">📍 Núcleos por Região do Amazonas</div>
+      <div class="bar-row"><div class="bar-label">Manaus (Centro)</div><div class="bar-bg"><div class="bar-fill" style="width:90%"></div></div><div class="bar-val">9</div></div>
+      <div class="bar-row"><div class="bar-label">Manaus (Zona Leste)</div><div class="bar-bg"><div class="bar-fill" style="width:70%"></div></div><div class="bar-val">7</div></div>
+      <div class="bar-row"><div class="bar-label">Manaus (Zona Norte)</div><div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div><div class="bar-val">5</div></div>
+      <div class="bar-row"><div class="bar-label">Baixo Amazonas</div><div class="bar-bg"><div class="bar-fill green" style="width:30%"></div></div><div class="bar-val">3</div></div>
+      <div class="bar-row"><div class="bar-label">Alto Solimões</div><div class="bar-bg"><div class="bar-fill yellow" style="width:20%"></div></div><div class="bar-val">2</div></div>
+      <div class="bar-row"><div class="bar-label">Rio Negro</div><div class="bar-bg"><div class="bar-fill blue" style="width:10%"></div></div><div class="bar-val">1</div></div>
+    </div>
+
+    <!-- Finanças resumo -->
+    <div class="panel">
+      <div class="section-title">💰 Resumo Financeiro – Mai/2026</div>
+      <div class="finance-row"><div class="fl">Mensalidades recebidas</div><div class="fv pos">R$ 5.220</div></div>
+      <div class="finance-row"><div class="fl">Doações / Campanhas</div><div class="fv pos">R$ 2.180</div></div>
+      <div class="finance-row"><div class="fl">Eventos e Rifas</div><div class="fv pos">R$ 1.340</div></div>
+      <div class="finance-row"><div class="fl">Total Receita</div><div class="fv pos">R$ 8.740</div></div>
+      <div class="finance-row"><div class="fl">Despesas Operacionais</div><div class="fv neg">R$ 3.120</div></div>
+      <div class="finance-row"><div class="fl">Material / Formação</div><div class="fv neg">R$ 1.450</div></div>
+      <div style="margin-top:6px" class="finance-row"><div class="fl" style="font-weight:700;color:#fff">SALDO DISPONÍVEL</div><div class="fv pos" style="font-size:13px">R$ 4.170</div></div>
+    </div>
+  </div>
+
+  <!-- Linha 3 -->
+  <div class="grid-3">
+    <!-- Perfil dos filiados -->
+    <div class="panel">
+      <div class="section-title">👥 Perfil dos Filiados</div>
+      <div class="mini-donut">
+        <svg class="donut-svg" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#c0392b" stroke-width="14" stroke-dasharray="85 109" stroke-dashoffset="0"/>
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#27ae60" stroke-width="14" stroke-dasharray="45 149" stroke-dashoffset="-85"/>
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#f1c40f" stroke-width="14" stroke-dasharray="30 164" stroke-dashoffset="-130"/>
+          <circle cx="40" cy="40" r="30" fill="none" stroke="#2980b9" stroke-width="14" stroke-dasharray="29 165" stroke-dashoffset="-160"/>
+          <text x="40" y="44" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">342</text>
+        </svg>
+        <div class="donut-legend">
+          <div><div class="dot" style="background:#c0392b"></div>Trabalhadores: 45%</div>
+          <div><div class="dot" style="background:#27ae60"></div>Estudantes: 26%</div>
+          <div><div class="dot" style="background:#f1c40f"></div>Camponeses: 18%</div>
+          <div><div class="dot" style="background:#2980b9"></div>Outros: 11%</div>
+        </div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="progress-box">
+          <div class="progress-label"><span>Mulheres</span><span>38%</span></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:38%;background:#e91e8c"></div></div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-label"><span>Jovens (até 30)</span><span>52%</span></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:52%;background:#f1c40f"></div></div>
+        </div>
+        <div class="progress-box">
+          <div class="progress-label"><span>Indígenas / Ribeirinhos</span><span>14%</span></div>
+          <div class="progress-bg"><div class="progress-fill" style="width:14%;background:#27ae60"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Agenda -->
+    <div class="panel">
+      <div class="section-title">📅 Próximas Atividades</div>
+      <div class="agenda-item">
+        <div class="agenda-date"><div class="day">12</div><div class="month">Mai</div></div>
+        <div class="agenda-info"><div class="title">Assembleia Regional Ampliada</div><div class="sub">Manaus – Sede / 18h · Todos os núcleos</div></div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-date"><div class="day">15</div><div class="month">Mai</div></div>
+        <div class="agenda-info"><div class="title">Círculo de Formação Política</div><div class="sub">Zona Leste · "Materialismo Histórico"</div></div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-date"><div class="day">20</div><div class="month">Mai</div></div>
+        <div class="agenda-info"><div class="title">Campanha de Filiação – Itacoatiara</div><div class="sub">Baixo Amazonas · Meta: 20 novos</div></div>
+      </div>
+      <div class="agenda-item">
+        <div class="agenda-date"><div class="day">01</div><div class="month">Jun</div></div>
+        <div class="agenda-info"><div class="title">Ação de Massa – Dia do Trabalhador</div><div class="sub">Manaus Centro · Ato público</div></div>
+      </div>
+    </div>
+
+    <!-- Alertas -->
+    <div class="panel">
+      <div class="section-title">⚠ Alertas e Pendências</div>
+      <div class="alert-box red"><div class="icon">🔴</div><div class="msg">8 filiados com mensalidade em atraso &gt; 60 dias</div></div>
+      <div class="alert-box"><div class="icon">🟡</div><div class="msg">Núcleo de Tefé sem ata registrada há 45 dias</div></div>
+      <div class="alert-box"><div class="icon">🟡</div><div class="msg">Meta de arrecadação maio: 91% – faltam R$ 860</div></div>
+      <div class="alert-box"><div class="icon">🔵</div><div class="msg">3 militantes sem módulo de formação concluído</div></div>
+      <div class="alert-box"><div class="icon">🟢</div><div class="msg">Relatório trimestral enviado ao Comitê Central ✓</div></div>
+    </div>
+  </div>
+
+  <!-- Tabela de Municípios -->
+  <div class="panel" style="margin-bottom:14px">
+    <div class="section-title">🗺 Situação por Município – Principais Pólos</div>
+    <table class="table">
+      <tr>
+        <th>Município</th><th>Núcleo</th><th>Filiados</th><th>Último Evento</th><th>Mensalidade (Mai)</th><th>Formação</th><th>Status</th>
+      </tr>
+      <tr><td>Manaus</td><td>Célula Zona Centro/Leste/Norte</td><td>198</td><td>05/Mai/2026</td><td>R$ 5.940</td><td>Em andamento</td><td><span class="badge-status ativo">ATIVO</span></td></tr>
+      <tr><td>Parintins</td><td>Núcleo Rio Amazonas</td><td>28</td><td>29/Abr/2026</td><td>R$ 840</td><td>Concluído</td><td><span class="badge-status ativo">ATIVO</span></td></tr>
+      <tr><td>Itacoatiara</td><td>Núcleo Baixo Amazonas</td><td>22</td><td>22/Abr/2026</td><td>R$ 660</td><td>Em andamento</td><td><span class="badge-status ativo">ATIVO</span></td></tr>
+      <tr><td>Tefé</td><td>Célula Médio Solimões</td><td>18</td><td>01/Abr/2026</td><td>R$ 360</td><td>Pendente</td><td><span class="badge-status alerta">ALERTA</span></td></tr>
+      <tr><td>Tabatinga</td><td>Núcleo Alto Solimões</td><td>15</td><td>15/Abr/2026</td><td>R$ 300</td><td>Não iniciado</td><td><span class="badge-status alerta">ALERTA</span></td></tr>
+      <tr><td>São Gabriel da Cachoeira</td><td>Célula Rio Negro</td><td>12</td><td>10/Mar/2026</td><td>R$ 120</td><td>Pendente</td><td><span class="badge-status inativo">INATIVO</span></td></tr>
+      <tr><td>Humaitá</td><td>Em implantação</td><td>6</td><td>—</td><td>—</td><td>—</td><td><span class="badge-status alerta">IMPL.</span></td></tr>
+    </table>
+  </div>
+
+  <!-- Formação -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="section-title">📚 Módulos de Formação Política – Progresso</div>
+      <div class="progress-box"><div class="progress-label"><span>Módulo 1 – Fundamentos do Marxismo</span><span>87%</span></div><div class="progress-bg"><div class="progress-fill" style="width:87%;background:#c0392b"></div></div></div>
+      <div class="progress-box"><div class="progress-label"><span>Módulo 2 – História do PCB-R</span><span>74%</span></div><div class="progress-bg"><div class="progress-fill" style="width:74%;background:#e74c3c"></div></div></div>
+      <div class="progress-box"><div class="progress-label"><span>Módulo 3 – Realidade Amazônica</span><span>61%</span></div><div class="progress-bg"><div class="progress-fill" style="width:61%;background:#f1c40f"></div></div></div>
+      <div class="progress-box"><div class="progress-label"><span>Módulo 4 – Organização e Tática</span><span>45%</span></div><div class="progress-bg"><div class="progress-fill" style="width:45%;background:#27ae60"></div></div></div>
+      <div class="progress-box"><div class="progress-label"><span>Módulo 5 – Comunicação e Agitação</span><span>32%</span></div><div class="progress-bg"><div class="progress-fill" style="width:32%;background:#2980b9"></div></div></div>
+    </div>
+    <div class="panel">
+      <div class="section-title">📣 Comunicação e Mídia – Mai/2026</div>
+      <div class="bar-row"><div class="bar-label">Posts nas redes sociais</div><div class="bar-bg"><div class="bar-fill blue" style="width:80%"></div></div><div class="bar-val">24</div></div>
+      <div class="bar-row"><div class="bar-label">Boletins distribuídos</div><div class="bar-bg"><div class="bar-fill green" style="width:60%"></div></div><div class="bar-val">1.200</div></div>
+      <div class="bar-row"><div class="bar-label">Panfletos impressos</div><div class="bar-bg"><div class="bar-fill yellow" style="width:70%"></div></div><div class="bar-val">3.500</div></div>
+      <div class="bar-row"><div class="bar-label">Matérias publicadas</div><div class="bar-bg"><div class="bar-fill" style="width:30%"></div></div><div class="bar-val">6</div></div>
+      <div class="bar-row"><div class="bar-label">Reuniões transmitidas</div><div class="bar-bg"><div class="bar-fill blue" style="width:40%"></div></div><div class="bar-val">3</div></div>
+      <div style="margin-top:10px;font-size:9px;color:#888">
+        📌 Canais ativos: Telegram · Instagram · Facebook · Site Regional
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <span>⚙ PCBR – Comitê Regional do Amazonas · Sistema de Gestão v1.0</span>
+  <span>Este documento é de uso interno e confidencial</span>
+  <span>Gerado em: 08/05/2026</span>
+</div>
+
+</body>
+</html>
